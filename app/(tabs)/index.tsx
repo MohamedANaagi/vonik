@@ -1,25 +1,30 @@
-import { StyleSheet, Text, View } from "react-native";
+import { createHomeStyles } from "@/assets/images/styles/home.styles";
+
+import { useTheme } from "@/hooks/useTheme";
+
+import { LinearGradient } from "expo-linear-gradient";
+
+import { StatusBar } from "react-native";
+
+import Header from "@/components/Header";
+import TodoInput from "@/components/TodoInput";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const { colors } = useTheme();
+  const homeStyles = createHomeStyles(colors);
   return (
-    <View style={styles.container}>
-      <Text style={styles.content}>index.tsx to edit this screen.</Text>
-      <Text>dcdcdcf</Text>
-    </View>
+    <LinearGradient
+      colors={colors.gradients.background}
+      style={homeStyles.container}
+    >
+      <StatusBar barStyle={colors.statusBarStyle} />
+
+      <SafeAreaView style={homeStyles.container}>
+        <Header />
+
+        <TodoInput />
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#1e293b",
-  },
-  content: {
-    color: "green",
-    fontSize: 20,
-    textAlign: "center",
-    marginHorizontal: 20,
-  },
-});

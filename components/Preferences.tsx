@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { Switch, Text, View } from "react-native";
 
-export const Preferences = () => {
+const Preferences = () => {
   const [isAutoSync, setIsAutoSync] = useState(true);
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
 
@@ -84,3 +84,5 @@ export const Preferences = () => {
     </LinearGradient>
   );
 };
+
+export default Preferences;

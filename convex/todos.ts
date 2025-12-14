@@ -1,6 +1,11 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+/**
+ * دالة لجلب جميع المهام من قاعدة البيانات
+ * تقوم بجلب جميع المهام وترتيبها حسب التاريخ (الأحدث أولاً)
+ * @returns قائمة بجميع المهام
+ */
 export const getTodos = query({
   handler: async (ctx) => {
     const todos = await ctx.db.query("todos").order("desc").collect();
@@ -8,6 +13,12 @@ export const getTodos = query({
   },
 });
 
+/**
+ * دالة لإضافة مهمة جديدة إلى قاعدة البيانات
+ * تقوم بإنشاء مهمة جديدة بنص محدد وحالة غير مكتملة افتراضياً
+ * @param text - نص المهمة المراد إضافتها
+ * @returns معرف المهمة الجديدة التي تم إنشاؤها
+ */
 export const addTodo = mutation({
   args: { text: v.string() },
   handler: async (ctx, args) => {
@@ -20,6 +31,12 @@ export const addTodo = mutation({
   },
 });
 
+/**
+ * دالة لتبديل حالة المهمة (مكتملة / غير مكتملة)
+ * تقوم بقراءة المهمة من قاعدة البيانات وتبديل حالتها
+ * @param id - معرف المهمة التي سيتم تبديل حالتها
+ * @throws ConvexError في حالة عدم وجود المهمة
+ */
 export const toggleTodo = mutation({
   args: { id: v.id("todos") },
   handler: async (ctx, args) => {
@@ -32,6 +49,11 @@ export const toggleTodo = mutation({
   },
 });
 
+/**
+ * دالة لحذف مهمة من قاعدة البيانات
+ * تقوم بحذف المهمة بناءً على معرفها
+ * @param id - معرف المهمة التي سيتم حذفها
+ */
 export const deleteTodo = mutation({
   args: { id: v.id("todos") },
   handler: async (ctx, args) => {
@@ -39,6 +61,12 @@ export const deleteTodo = mutation({
   },
 });
 
+/**
+ * دالة لتحديث نص المهمة
+ * تقوم بتعديل نص المهمة في قاعدة البيانات
+ * @param id - معرف المهمة التي سيتم تحديثها
+ * @param text - النص الجديد للمهمة
+ */
 export const updateTodo = mutation({
   args: {
     id: v.id("todos"),
@@ -51,11 +79,16 @@ export const updateTodo = mutation({
   },
 });
 
+/**
+ * دالة لحذف جميع المهام من قاعدة البيانات
+ * تقوم بجلب جميع المهام ثم حذفها واحداً تلو الآخر
+ * @returns عدد المهام التي تم حذفها
+ */
 export const clearAllTodos = mutation({
   handler: async (ctx) => {
     const todos = await ctx.db.query("todos").collect();
 
-    // Delete all todos
+    // Delete all todos - حذف جميع المهام
     for (const todo of todos) {
       await ctx.db.delete(todo._id);
     }
